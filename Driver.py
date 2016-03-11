@@ -8,19 +8,10 @@
 import time
 import os
 import RPi.GPIO as GPIO
-import uinput
-
-# Define used keys from uinput
-device = uinput.Device([
-	uinput.KEY_W,
-	uinput.KEY_S,
-	uinput.KEY_A,
-	uinput.KEY_D,
-	uinput.KEY_UP,
-	uinput.KEY_LEFT,
-	uinput.KEY_DOWN,
-	uinput.KEY_RIGHT
-	])
+import evdev
+import evdev.eventio.EventIO as EventIO
+from evdev import UInput, InputDevice, categorize, ecodes
+dev = UInput(None, 'py-evdev-uinput', 1, 1, 3, '/dev/input/event0')
 
 GPIO.setmode(GPIO.BCM)
 
@@ -87,26 +78,87 @@ joyY1 = 1
 joyX2 = 2
 joyY2 = 3
 
+isW = False
+isS = False
+isA = False
+isD = False
+
+isUp = False
+isDown = False
+isLeft = False
+isRight = False
+
 while True:
 	
 	# Do the input logic
-	if (readadc(joyX1, SPICLK, SPIMOSI, SPIMISO, SPICS) < 924):
-		device.emit_click(uinput.KEY_A)
-	elif (readadc(joyX1, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1124):
-		device.emit_click(uinput.KEY_D)
+	if (readadc(joyX, SPICLK, SPIMOSI, SPIMISO, SPICS) < 924):
+		if (isA != True):
+			dev.write(e.EV_KEY, e.KEY_A, 1)
+			isA = True
+	else:
+		if (isA = True):
+			dev.write(e.EV_KEY, e.KEY_A, 0)
+			isA = False
+	
+	if (readadc(joyX1, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1124):
+		if (isD != True):
+			dev.write(e.EV_KEY, e.KEY_D, 1)
+			isD = True
+	else:
+		if (isD = True):
+			dev.write(e.EV_KEY, e.KEY_D, 0)
+			isD = False
 
 	if (readadc(joyY1, SPICLK, SPIMOSI, SPIMISO, SPICS) < 924):
-		device.emit_click(uinput.KEY_S)
-	elif (readadc(joyY1, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1124):
-		device.emit_click(uinput.KEY_W)
+		if (isS != True):
+			dev.write(e.EV_KEY, e.KEY_S, 1)
+			isS = True
+	else:
+		if (isS = True):
+			dev.write(e.EV_KEY, e.KEY_S, 0)
+			isS = False
+	
+	if (readadc(joyY1, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1124):
+		if (isW != True):
+			dev.write(e.EV_KEY, e.KEY_W, 1)
+			isW = True
+	else:
+		if (isW = True):
+			dev.write(e.EV_KEY, e.KEY_W, 0)
+			isW = False
 
 	if (readadc(joyX2, SPICLK, SPIMOSI, SPIMISO, SPICS) < 924):
-		device.emit_click(uinput.KEY_LEFT)
-	elif (readadc(joyX2, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1124):
-		device.emit_click(uinput.KEY_RIGHT)
+		if (isLeft != True):
+			dev.write(e.EV_KEY, e.KEY_LEFT, 1)
+			isLeft = True
+	else:
+		if (isLeft = True):
+			dev.write(e.EV_KEY, e.KEY_LEFT, 0)
+			isLeft = False
+	
+	if (readadc(joyX2, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1124):
+		if (isRight != True):
+			# Write keyDown
+			isRight = True
+	else:
+		if (isRight = True):
+			#Write keyUp
+			isRight = False
 
 	if (readadc(joyY2, SPICLK, SPIMOSI, SPIMISO, SPICS) < 924):
-		device.emit_click(uinput.KEY_DOWN)
+		if (isDown != True):
+			# Write keyDown
+			isDown = True
+	else:
+		if (isDown = True):
+			#Write keyUp
+			isDown = False
 	elif (readadc(joyY2, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1124):
-		device.emit_click(uinput.KEY_UP)
+		if (isUp != True):
+			# Write keyDown
+			isUp = True
+	else:
+		if (isUp = True):
+			#Write keyUp
+			isUp = False
 
