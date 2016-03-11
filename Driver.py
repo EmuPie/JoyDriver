@@ -96,7 +96,7 @@ while True:
 			dev.write(e.EV_KEY, e.KEY_A, 1)
 			isA = True
 	else:
-		if (isA = True):
+		if (isA == True):
 			dev.write(e.EV_KEY, e.KEY_A, 0)
 			isA = False
 	
@@ -105,7 +105,7 @@ while True:
 			dev.write(e.EV_KEY, e.KEY_D, 1)
 			isD = True
 	else:
-		if (isD = True):
+		if (isD == True):
 			dev.write(e.EV_KEY, e.KEY_D, 0)
 			isD = False
 
@@ -114,7 +114,7 @@ while True:
 			dev.write(e.EV_KEY, e.KEY_S, 1)
 			isS = True
 	else:
-		if (isS = True):
+		if (isS == True):
 			dev.write(e.EV_KEY, e.KEY_S, 0)
 			isS = False
 	
@@ -123,7 +123,7 @@ while True:
 			dev.write(e.EV_KEY, e.KEY_W, 1)
 			isW = True
 	else:
-		if (isW = True):
+		if (isW == True):
 			dev.write(e.EV_KEY, e.KEY_W, 0)
 			isW = False
 
@@ -132,33 +132,33 @@ while True:
 			dev.write(e.EV_KEY, e.KEY_LEFT, 1)
 			isLeft = True
 	else:
-		if (isLeft = True):
+		if (isLeft == True):
 			dev.write(e.EV_KEY, e.KEY_LEFT, 0)
 			isLeft = False
 	
 	if (readadc(joyX2, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1124):
 		if (isRight != True):
-			# Write keyDown
+			dev.write(e.EV_KEY, e.KEY_RIGHT, 1)
 			isRight = True
 	else:
-		if (isRight = True):
-			#Write keyUp
+		if (isRight == True):
+			dev.write(e.EV_KEY, e.KEY_RIGHT, 0)
 			isRight = False
 
 	if (readadc(joyY2, SPICLK, SPIMOSI, SPIMISO, SPICS) < 924):
 		if (isDown != True):
-			# Write keyDown
+			dev.write(e.EV_KEY, e.KEY_DOWN, 1)
 			isDown = True
 	else:
-		if (isDown = True):
-			#Write keyUp
+		if (isDown == True):
+			dev.write(e.EV_KEY, e.KEY_DOWN, 0)
 			isDown = False
 	elif (readadc(joyY2, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1124):
 		if (isUp != True):
-			# Write keyDown
+			dev.write(e.EV_KEY, e.KEY_UP, 1)
 			isUp = True
 	else:
-		if (isUp = True):
-			#Write keyUp
+		if (isUp == True):
+			dev.write(e.EV_KEY, e.KEY_UP, 0)
 			isUp = False
 
