@@ -9,10 +9,10 @@ import time
 import os
 import RPi.GPIO as GPIO
 import evdev
-import evdev.eventio.EventIO as EventIO
-from evdev import UInput, InputDevice, categorize, ecodes
-dev = UInput(None, 'py-evdev-uinput', 1, 1, 3, '/dev/input/event0')
-
+#import evdev.eventio.EventIO as EventIO
+from evdev import UInput, InputDevice, categorize, ecodes as e
+#dev = UInput(None, 'py-evdev-uinput', 0x1, 0x1, 0x3, '/dev/input/event0', 'py-evdev-uinput')
+dev = UInput()
 GPIO.setmode(GPIO.BCM)
 
 # read SPI data from <insert ADC name here> chip, 4 possible adc's (0 thru 3)
@@ -89,27 +89,31 @@ isLeft = False
 isRight = False
 
 while True:
-	
+	#print(readadc(joyX1, SPICLK, SPIMOSI, SPIMISO, SPICS))
+	#print(readadc(joyY1, SPICLK, SPIMOSI, SPIMISO, SPICS))
+	#print(readadc(joyX2, SPICLK, SPIMOSI, SPIMISO, SPICS))
+	#print(readadc(joyY2, SPICLK, SPIMOSI, SPIMISO, SPICS))
+
 	# Do the input logic
-	if (readadc(joyX, SPICLK, SPIMOSI, SPIMISO, SPICS) < 924):
+	if (readadc(joyX1, SPICLK, SPIMOSI, SPIMISO, SPICS) < 900):
 		if (isA != True):
-			dev.write(e.EV_KEY, e.KEY_A, 1)
+			dev.write(e.EV_KEY, e.KEY_D, 1)
 			isA = True
 	else:
 		if (isA == True):
-			dev.write(e.EV_KEY, e.KEY_A, 0)
+			dev.write(e.EV_KEY, e.KEY_D, 0)
 			isA = False
 	
-	if (readadc(joyX1, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1124):
+	if (readadc(joyX1, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1148):
 		if (isD != True):
-			dev.write(e.EV_KEY, e.KEY_D, 1)
+			dev.write(e.EV_KEY, e.KEY_A, 1)
 			isD = True
 	else:
 		if (isD == True):
-			dev.write(e.EV_KEY, e.KEY_D, 0)
+			dev.write(e.EV_KEY, e.KEY_A, 0)
 			isD = False
 
-	if (readadc(joyY1, SPICLK, SPIMOSI, SPIMISO, SPICS) < 924):
+	if (readadc(joyY1, SPICLK, SPIMOSI, SPIMISO, SPICS) < 900):
 		if (isS != True):
 			dev.write(e.EV_KEY, e.KEY_S, 1)
 			isS = True
@@ -118,7 +122,7 @@ while True:
 			dev.write(e.EV_KEY, e.KEY_S, 0)
 			isS = False
 	
-	if (readadc(joyY1, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1124):
+	if (readadc(joyY1, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1148):
 		if (isW != True):
 			dev.write(e.EV_KEY, e.KEY_W, 1)
 			isW = True
@@ -126,26 +130,32 @@ while True:
 		if (isW == True):
 			dev.write(e.EV_KEY, e.KEY_W, 0)
 			isW = False
+	
+	#dev.write(e.EV_KEY, e.KEY_LEFT, 1 if readadc(joyX2, SPICLK, SPIMOSI, SPIMISO, SPICS) < 900 else 0)
+	#dev.write(e.EV_KEY, e.KEY_RIGHT, 1 if readadc(joyX2, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1148 else 0)
 
-	if (readadc(joyX2, SPICLK, SPIMOSI, SPIMISO, SPICS) < 924):
+	if (readadc(joyX2, SPICLK, SPIMOSI, SPIMISO, SPICS) < 900):
+		#print("Left")
 		if (isLeft != True):
-			dev.write(e.EV_KEY, e.KEY_LEFT, 1)
+			dev.write(e.EV_KEY, e.KEY_RIGHT, 1)
 			isLeft = True
 	else:
 		if (isLeft == True):
-			dev.write(e.EV_KEY, e.KEY_LEFT, 0)
+			dev.write(e.EV_KEY, e.KEY_RIGHT, 0)
 			isLeft = False
 	
-	if (readadc(joyX2, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1124):
+	if (readadc(joyX2, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1148):
+		#print("Right")
 		if (isRight != True):
-			dev.write(e.EV_KEY, e.KEY_RIGHT, 1)
+			dev.write(e.EV_KEY, e.KEY_LEFT, 1)
 			isRight = True
 	else:
 		if (isRight == True):
-			dev.write(e.EV_KEY, e.KEY_RIGHT, 0)
+			dev.write(e.EV_KEY, e.KEY_LEFT, 0)
 			isRight = False
 
-	if (readadc(joyY2, SPICLK, SPIMOSI, SPIMISO, SPICS) < 924):
+	if (readadc(joyY2, SPICLK, SPIMOSI, SPIMISO, SPICS) < 900):
+		#print("Down")
 		if (isDown != True):
 			dev.write(e.EV_KEY, e.KEY_DOWN, 1)
 			isDown = True
@@ -153,7 +163,8 @@ while True:
 		if (isDown == True):
 			dev.write(e.EV_KEY, e.KEY_DOWN, 0)
 			isDown = False
-	elif (readadc(joyY2, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1124):
+	if (readadc(joyY2, SPICLK, SPIMOSI, SPIMISO, SPICS) > 1148):
+		#print("Up")
 		if (isUp != True):
 			dev.write(e.EV_KEY, e.KEY_UP, 1)
 			isUp = True
@@ -161,4 +172,5 @@ while True:
 		if (isUp == True):
 			dev.write(e.EV_KEY, e.KEY_UP, 0)
 			isUp = False
-
+	
+	dev.syn()
