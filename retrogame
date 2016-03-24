@@ -1,0 +1,30 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides: 		retrogame
+# Required-Start:
+# Required-Stop:
+# Default-Start:	2 3 4 5
+# Default-Stop:		0 1 6
+# Short-Description:	Controller Driver
+# Description: 		Launches controller driver
+### END INIT INFO
+
+case "$1" in
+	start)
+		echo "Starting Controller Driver"
+		/home/pi/Adafruit-Retrogame/retrogame &
+		python /home/pi/JoyDriver/Driver.py &
+		;;
+	stop)
+		echo "Stopping Controller Driver"
+		killall retrogame
+		killall python
+		;;
+	*)
+		echo "Usage: start|stop"
+		exit 1
+		;;
+esac
+
+exit 0
