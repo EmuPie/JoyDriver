@@ -3,7 +3,7 @@
 # Written by Limor "Ladyada" Fried for Adafruit Industries, (c) 2015
 # This code is released into the public domain
 
-# Adapted for <insert ADC name here> by Rickard Doverfelt
+# Adapted for ADC0834-N by Rickard Doverfelt
 
 import time
 import os
@@ -15,7 +15,7 @@ from evdev import UInput, InputDevice, categorize, ecodes as e
 dev = UInput()
 GPIO.setmode(GPIO.BCM)
 
-# read SPI data from <insert ADC name here> chip, 4 possible adc's (0 thru 3)
+# read SPI data from ADC0834-N chip, 4 possible adc's (0 thru 3)
 def readadc(adcnum, clockpin, mosipin, misopin, cspin):
         if ((adcnum > 3) or (adcnum < 0)):
                 return -1
